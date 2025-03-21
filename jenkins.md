@@ -107,3 +107,18 @@ pipeline {
         }
     }
 }
+
+
+
+   Example 2 of Pipelines
+   pipeline {
+    agent any
+    stages {
+        stage('Verify Docker') {
+            steps {
+                sh 'docker ps'
+            }
+        }
+    }
+}
+
