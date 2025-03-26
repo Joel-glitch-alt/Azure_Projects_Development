@@ -85,27 +85,28 @@ In Jenkins, a Pipeline is a suite of plugins that supports implementing and inte
 ======>>>>>>>>A simple example of a Jenkinsfile defining a pipeline:
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('w/o docker') {
             steps {
-                echo 'Building...'
-                // Add build steps here
+                sh '''
+                echo "without Docker"
+                ls -la
+                touch container-no.txt
+                '''
             }
         }
-        stage('Test') {
+        stage('w/ docker') {
             steps {
-                echo 'Testing...'
-                // Add test steps here
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // Add deploy steps here
+                sh '''
+                echo "Running Node.js inside Docker"
+                docker run --rm -v "$PWD:/workspace" -w /workspace node:18-alpine sh -c "ls -la && touch container-yes.txt"
+                '''
             }
         }
     }
 }
+
 
 
 
