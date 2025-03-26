@@ -151,3 +151,16 @@ pipeline {
     }
 }
 
+
+
+
+MASTER OR CONTROLLER
+In Jenkins, the Master (also known as the Controller) is the central server that manages the Jenkins environment. It is responsible for orchestrating the execution of jobs, managing build agents (also known as nodes or slaves), and providing the user interface for configuring and monitoring Jenkins.
+
+Key responsibilities of the Jenkins Master include:
+
+Job Scheduling: The master schedules and assigns jobs to build agents for execution.
+Build Management: It manages the build process, including triggering builds, collecting build results, and storing build artifacts.
+User Interface: The master provides a web-based user interface for configuring Jenkins, creating and managing jobs, and viewing build results and logs.
+Plugin Management: It manages the installation and configuration of plugins, which extend Jenkins' functionality.
+Security Management: The master handles user authentication, authorization, and security settings.
