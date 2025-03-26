@@ -164,3 +164,6 @@ Build Management: It manages the build process, including triggering builds, col
 User Interface: The master provides a web-based user interface for configuring Jenkins, creating and managing jobs, and viewing build results and logs.
 Plugin Management: It manages the installation and configuration of plugins, which extend Jenkins' functionality.
 Security Management: The master handles user authentication, authorization, and security settings.
+
+           AGENT
+In Jenkins, an Agent (also known as a Node or Slave) is a machine that is configured to execute jobs assigned by the Jenkins Master (Controller). Agents can run on different operating systems and can be physical machines, virtual machines, or containers. They help distribute the workload, allowing Jenkins to run multiple jobs in parallel and improving the overall performance and scalability of the CI/CD pipeline.
