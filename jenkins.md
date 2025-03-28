@@ -112,16 +112,31 @@ pipeline {
 
    Example 2 of Pipelines
    
-   pipeline {
+pipeline {
     agent any
+
     stages {
-        stage('Verify Docker') {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
             steps {
-                sh 'docker ps'
+                sh '''
+                ls -la
+                node --version
+                npm --version
+                npm ci
+                npm run build
+                ls -la 
+                '''
             }
         }
     }
 }
+
 
 
 Using A JUnit Test Report
@@ -168,3 +183,9 @@ Security Management: The master handles user authentication, authorization, and 
 
            AGENT
 In Jenkins, an Agent (also known as a Node or Slave) is a machine that is configured to execute jobs assigned by the Jenkins Master (Controller). Agents can run on different operating systems and can be physical machines, virtual machines, or containers. They help distribute the workload, allowing Jenkins to run multiple jobs in parallel and improving the overall performance and scalability of the CI/CD pipeline.
+
+
+
+RESTART JENKINS AND DOCKER
+     sudo systemctl restart jenkins
+     sudo systemctl restart docker
