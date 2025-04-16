@@ -1,24 +1,28 @@
-name : Deployment to Azure App Service
+name: Deployment to Azure App Service
 
-on : 
+on:
   push:
     branches:
       - main
 
 jobs:
   build-and-deploy:
-   runs-on: ubuntu-latest
-   steps:
-     - name: Checkout Source
-       uses: actions/checkout@v4 #versions
-     - name: Setup Node.js version
-       uses: actions/setup-node@v3 #versions
-       with:
-         node-version: '20' #versions
-     - name: Install Dependencies 
-       run: npm install
-       name: Deploy to Azure App Service
-       usess: azure/webapps-deploy@v2 #versions
-       with:
-       app-name: 'your-app-name' #your app name
-       publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }} #your publish profile
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'your-app-name' # Replace this with your actual Azure App Service name
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }} # Set this secret in your GitHub repo
