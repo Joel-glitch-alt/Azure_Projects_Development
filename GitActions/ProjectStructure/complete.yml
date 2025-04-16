@@ -1,0 +1,143 @@
+my_project/
+├── backend/ (Django)
+│   ├── manage.py
+│   ├── requirements.txt
+│   └── ...
+├── frontend/ (Flutter)
+│   ├── lib/
+│   ├── pubspec.yaml
+│   └── ...
+└── .github/
+    └── workflows/
+        ├── django-ci.yml
+        └── flutter-ci.yml
+
+
+***********************************************************
+2. CI/CD for Django Backend
+This workflow will:
+✅ Run Django tests
+✅ Check migrations
+✅ Deploy to a server (e.g., AWS, GCP, or Heroku)
+
+File: .github/workflows/django-ci.yml
+
+name: Django CI/CD
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run Django tests
+        run: |
+          cd backend
+          python manage.py test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Only deploy on main branch
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      # Example: Deploy to Heroku (adjust for AWS/GCP)
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: |
+          git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
+          git push heroku main:master -f
+
+************************************************************
+3. CI/CD for Flutter Frontend
+This workflow will:
+✅ Test Flutter app
+✅ Build APK/AAB (Android) & IPA (iOS)
+✅ Deploy to Firebase/Google Play/App Store
+
+File: .github/workflows/flutter-ci.yml
+
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.5"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+  build-android:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.5"
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  deploy-android:
+    needs: build-android
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: app-release.apk
+
+      - name: Deploy to Firebase App Distribution
+        run: |
+          firebase appdistribution:distribute app-release.apk \
+          --app ${{ secrets.FIREBASE_APP_ID }} \
+          --groups "testers" \
+          --token "${{ secrets.FIREBASE_TOKEN }}"
