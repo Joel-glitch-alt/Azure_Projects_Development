@@ -1,0 +1,5 @@
+#******** GIT HUB ACTIONS ********
+GitHub Actions is a CI/CD (Continuous Integration and Continuous Deployment) platform provided by GitHub.
+It allows you to automate, build, test, and deploy your code directly from your GitHub repository.
+With GitHub Actions, you can define workflows using YAML files to automate various tasks, 
+such as running tests, deploying applications, or performing code analysis.

@@ -30,15 +30,18 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y openjdk-11-jdk
 
 3.2 Add Jenkins Repository and Install Jenkins
+
 curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
   /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
+  
 sudo apt-get update
 sudo apt-get install jenkins
 
 *3.3 Start and Enable Jenkins
+
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
@@ -49,6 +52,7 @@ http://<your-vm-public-ip>:8080
 
 **To Get Jenkins Password
 Run this command to get the password:
+
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 
@@ -83,6 +87,7 @@ Automating Tasks: Perform routine tasks such as code analysis, documentation gen
 In Jenkins, a Pipeline is a suite of plugins that supports implementing and integrating continuous delivery pipelines. A pipeline defines the entire workflow of your software development process, from building and testing to deploying and delivering applications. Pipelines are defined using a domain-specific language (DSL) called Groovy, and they can be version-controlled along with your source code using a Jenkinsfile.
 
 ======>>>>>>>>A simple example of a Jenkinsfile defining a pipeline:
+
 pipeline {
     agent any
 
