@@ -42,4 +42,6 @@ Secure CI/CD Pipelines – Scan for vulnerabilities before deployment.
 
 Air-Gapped Environments – Host internal dependencies offline.
 
-Docker Private Registry – Store custom container images securely
+Docker Private Registry – Store custom container images securely.
+
+
