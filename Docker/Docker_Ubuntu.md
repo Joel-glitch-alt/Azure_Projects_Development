@@ -1,8 +1,7 @@
 HOW TO RUN JENKINS AND SONARQUBE ON DOCKER CONTAINER USING UBUNTU
-
+*****************************************************************************************************************************
 STEP 1
 RUNNING JENKINS ON DOCKER CONTAINER SERVERLESS
-
  *************Using Serverless Docker 
 
 docker run -d \                 
@@ -15,7 +14,6 @@ jenkins/jenkins:lts
 
 
 🛠️ Option 2: Install Docker CLI inside Jenkins container
-bash
 
 docker exec -it joel-jenkins bash
 
