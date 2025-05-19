@@ -5,3 +5,6 @@ docker rm jenkins
 Start or restart a container 
 docker start <name of container>
 docker restart <name of conatainer>
+
+To remove a running container
+docker rm <name of container>

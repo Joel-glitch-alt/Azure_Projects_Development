@@ -12,22 +12,31 @@ docker run -d \
 -u root \
 jenkins/jenkins:lts
 
-example 2
+example 2 (second Jenkins-Docker container fresh project).
 
 docker run -d \
---name addition-jenkins \
--p 8081:8081 -p 50000:50000 \
+--name addition-jenkins-fresh \
+-p 8081:8080 \
+-p 50000:50000 \
 -v /var/run/docker.sock:/var/run/docker.sock \
--v jenkins_home:/var/jenkins_home \
+-v jenkins_home_fresh:/var/jenkins_home \
 -u root \
 jenkins/jenkins:lts
 
+***To get password of fresh container 
+docker exec addition-jenkins-fresh cat /var/jenkins_home/secrets/initialAdminPassword
+
+
+
+
+*********** Get IP address of your serverless host
+ip a
 
 
 
 🛠️ Option 2: Install Docker CLI inside Jenkins container
 
-docker exec -it joel-jenkins bash
+docker exec -it <name of conatiner> bash
 
 Then inside the container:
 apt-get update
@@ -40,7 +49,7 @@ After this, try: docker --version inside the container.
  2) TO GET THE JENKINS PASSWORD 
 
  ****************************To get the initial admin password for Jenkins and complete the setup, run:
-docker exec -it joel-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+docker exec -it <name of container> cat /var/jenkins_home/secrets/initialAdminPassword
 
 *******************************************************************************************************************************
 
