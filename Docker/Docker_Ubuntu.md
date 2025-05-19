@@ -4,13 +4,25 @@ STEP 1
 RUNNING JENKINS ON DOCKER CONTAINER SERVERLESS
  *************Using Serverless Docker 
 
-docker run -d \                 
+docker run -d \
 --name joel-jenkins \
 -p 8080:8080 -p 50000:50000 \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v jenkins_home:/var/jenkins_home \
 -u root \
 jenkins/jenkins:lts
+
+example 2
+
+docker run -d \
+--name addition-jenkins \
+-p 8081:8081 -p 50000:50000 \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v jenkins_home:/var/jenkins_home \
+-u root \
+jenkins/jenkins:lts
+
+
 
 
 🛠️ Option 2: Install Docker CLI inside Jenkins container
@@ -62,4 +74,4 @@ docker exec -it jenkins-dind-new bash
 *To start my SonarQube Container 
 sudo docker start SonarQube
 
-*************************************************************************************************************************************************
+*******************************************************************************************************************************************
