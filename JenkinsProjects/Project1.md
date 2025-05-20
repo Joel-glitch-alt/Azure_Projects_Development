@@ -35,7 +35,7 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 ....Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
 
-   COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB).
+   COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
 ***************************************************************************************************************************
 pipeline {
     agent any
@@ -128,6 +128,61 @@ pipeline {
         }
         failure {
             echo '❌ Pipeline failed.'
+        }
+    }
+}
+
+
+************************************PROJECT TWO USING NODEJS (BACK END) working****************************************
+JENKINS PIPELINE
+
+pipeline {
+    agent any
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/Joel-glitch-alt/Best_Node_Express.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Jenkins-Sona-ServerTwo') {
+                    sh """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                          -Dsonar.projectKey=Back_End_project_key \
+                          -Dsonar.projectName="Back_End_NodeJS" \
+                          -Dsonar.sources=./src \
+                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                          -Dsonar.sourceEncoding=UTF-8
+                    """
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
     }
 }
