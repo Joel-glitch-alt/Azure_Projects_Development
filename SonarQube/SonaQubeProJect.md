@@ -87,3 +87,6 @@ Manage Jenkins --- System --- Scroll down to 'SonarQube servers' --- Click on 'A
 
 <For the next steps, please watch the video>
 https://www.youtube.com/watch?v=ScdedztTaAU
+
+using Pipelines withJenkins and SonarQube
+https://youtu.be/NnkUGzaqqOc

@@ -23,7 +23,13 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 *** SETTING JENKINS SONARQUBE SERVER
 7) Manage Jenkins >> System >> scroll down to 'SonarQube servers' Click on 'Add SonarQube' >> Provide a name to be used in the Pipeline (eg,Jenkins-Sonar-Server), >> copy sonarqube url (eg, http://localhost:9000 no slash) and paste it in the 'server url', >> Server Authentication select the name of your sonarqube token (eg, sonar-token) >> click "Apply" and "SAVE".
 
-8) Move On To Create Your Pipeline
+
+8) SETTING UP GIT-HUB CREDENTIALS TO JENKINS
+ Open repo and navigate to settings >> Developer settings >> Personal Access Tokens >> Tokens(classic) >> Generate New Token >>Generate new token classic >> Check Mark all except delete repo >> click on generate token.
+
+ 9) Move to Jenkins >> Manage Jenkins >> Credentials >> Global >> 'username and password', provide Git-Hub username and the Token generated as password 
+
+10) Move On To Create Your Pipeline
 
 
 ....Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).

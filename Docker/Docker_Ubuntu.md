@@ -36,7 +36,7 @@ ip a
 
 🛠️ Option 2: Install Docker CLI inside Jenkins container
 
-docker exec -it <name of conatiner> bash
+docker exec -it <name of conatiner> bash           
 
 Then inside the container:
 apt-get update
