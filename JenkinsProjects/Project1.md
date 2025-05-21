@@ -25,12 +25,11 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 
 8) SETTING UP GIT-HUB CREDENTIALS TO JENKINS
- Open repo and navigate to settings >> Developer settings >> Personal Access Tokens >> Tokens(classic) >> Generate New Token >>Generate new token classic >> Check Mark all except delete repo >> click on generate token.
+ Go to repositories and navigate to settings >> Developer settings >> Personal Access Tokens >> Tokens(classic) >> Generate New Token >>Generate new token classic >> Check Mark all except delete repo >> click on generate token.
 
- 9) Move to Jenkins >> Manage Jenkins >> Credentials >> Global >> 'username and password', provide Git-Hub username and the Token generated as password 
+ 9) Move to Jenkins >> Manage Jenkins >> Credentials >> Global >> 'username and password', provide Git-Hub username and the Token generated as password.
 
 10) Move On To Create Your Pipeline
-
 
 ....Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
@@ -136,11 +135,13 @@ pipeline {
 ************************************PROJECT TWO USING NODEJS (BACK END) working****************************************
 JENKINS PIPELINE
 
-pipeline {
+   pipeline {
     agent any
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+        DOCKER_USERNAME = 'addition1905'
+        DOCKER_IMAGE = 'addition1905/back-end-nodejs:latest'
     }
 
     stages {
@@ -183,6 +184,26 @@ pipeline {
                     waitForQualityGate abortPipeline: true
                 }
             }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    def img = docker.build("${DOCKER_IMAGE}")
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-key2') {
+                        img.push()
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ All steps completed successfully.'
+        }
+        failure {
+            echo '❌ Pipeline failed.'
         }
     }
 }
