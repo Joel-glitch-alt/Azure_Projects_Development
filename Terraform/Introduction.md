@@ -54,3 +54,49 @@ Terraform is an open-source Infrastructure as Code (IaC) tool developed by Hashi
             directory_permission = "0777"
          }
 # This is a local file that will be created in the current directory
+
+
+terraform {
+  required_providers {
+    local = {
+      source = "hashicorp/local"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "local" {}
+provider "random" {}
+
+resource "local_sensitive_file" "pet" {
+  content              = "This is a sensitive file"
+  filename             = "${path.module}/files/outputfile"
+  file_permission      = "0700"
+  directory_permission = "0777"
+}
+
+resource "local_file" "cat" {
+  filename = "${path.module}/files/outputfile2"
+  content  = "My favourite pet is called Penny Dollars"
+}
+
+resource "random_integer" "my_number" {
+  min = 1
+  max = 100
+}
+
+resource "random_pet" "random_name" {
+  length    = 2
+  separator = "-"
+}
+
+output "generated_number" {
+  value = random_integer.my_number.result
+}
+
+output "generated_name" {
+  value = random_pet.random_name.id
+}
