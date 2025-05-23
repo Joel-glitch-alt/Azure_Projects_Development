@@ -101,10 +101,11 @@ output "generated_name" {
   value = random_pet.random_name.id
 }
 
-
-                   ____________________________USING AZURE_______________________________
+_________________________________________PROJECT TWO_________________________________________________
+             ____________________________USING AZURE_______________________________
 
      # USING AZURE (creating a virtual machine & resouce groups)
+     <!--  -->
 provider "azurerm" {
   features {}
   subscription_id = "14430f9f-bd49-4721-b2ec-8b513c352e9a"
@@ -129,6 +130,14 @@ resource "azurerm_subnet" "main" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
+resource "azurerm_public_ip" "main" {
+  name                = "first-public-ip"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  allocation_method   = "Dynamic"
+  sku                 = "Basic"
+}
+
 resource "azurerm_network_interface" "main" {
   name                = "first-nic"
   location            = azurerm_resource_group.main.location
@@ -138,7 +147,43 @@ resource "azurerm_network_interface" "main" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.main.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.main.id
   }
+}
+
+resource "azurerm_network_security_group" "main" {
+  name                = "first-nsg"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  security_rule {
+    name                       = "Allow-SSH"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Allow-HTTP"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "main" {
+  subnet_id                 = azurerm_subnet.main.id
+  network_security_group_id = azurerm_network_security_group.main.id
 }
 
 resource "azurerm_virtual_machine" "main" {
@@ -146,7 +191,7 @@ resource "azurerm_virtual_machine" "main" {
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size = "Standard_B1s"       
+  vm_size               = "Standard_B1s"
 
   storage_os_disk {
     name              = "firstVM-os-disk"
@@ -155,18 +200,17 @@ resource "azurerm_virtual_machine" "main" {
     managed_disk_type = "Standard_LRS"
   }
 
-storage_image_reference {
-  publisher = "Canonical"
-  offer     = "0001-com-ubuntu-server-focal"
-  sku       = "20_04-lts-gen2"
-  version   = "latest"
-}
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts-gen2"
+    version   = "latest"
+  }
 
-
-os_profile {
+  os_profile {
     computer_name  = "firstVm"
     admin_username = "addition"
-    admin_password = "Youth@99"  # ⚠️ Not recommended in plaintext for production
+    admin_password = "Youth@99"  # ⚠️ Not recommended for production use
   }
 
   os_profile_linux_config {

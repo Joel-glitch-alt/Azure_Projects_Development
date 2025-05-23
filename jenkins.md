@@ -12,6 +12,10 @@ Paste your public SSH key (or generate one if you don't have one).
 Click "Next: Disks", select Standard SSD.
 Click "Next: Networking", ensure:
 Public IP is enabled.
+|
+|
+|
+**************************____________________________******************************
 Inbound port rules: Allow SSH (22) and HTTP (80).
 Click Review + Create → Click Create.
 
