@@ -146,7 +146,7 @@ resource "azurerm_virtual_machine" "main" {
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size = "Standard_B1s"       #  vm_size               = "Standard_DS1_v2"
+  vm_size = "Standard_B1s"       
 
   storage_os_disk {
     name              = "firstVM-os-disk"
