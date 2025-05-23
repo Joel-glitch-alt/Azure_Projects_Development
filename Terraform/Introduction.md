@@ -221,3 +221,61 @@ resource "azurerm_virtual_machine" "main" {
     environment = "TerraformDemo"
   }
 }
+
+***************************************************************************************************************************
+Great! Since you have a static website (HTML, CSS, JavaScript) hosted on GitHub, you can easily run it on your Azure Ubuntu VM using Nginx — a lightweight web server.
+
+Here’s a step-by-step guide to clone your project and serve it publicly:
+
+✅ Step-by-Step: Deploy Static Website on Azure VM
+
+1. Install Nginx
+
+sudo apt update
+sudo apt install nginx -y
+
+2. Clone your GitHub repository
+Replace the URL with your GitHub repo:
+
+cd /var/www
+sudo git clone https://github.com/your-username/your-repo.git
+Example:
+
+sudo git clone https://github.com/Joel-glitch-alt/static-website.git
+
+3. Configure Nginx
+Let's assume your project is cloned to /var/www/static-website.
+
+Edit the Nginx default config:
+
+sudo nano /etc/nginx/sites-available/default
+Replace the server block with:
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/static-website;
+    index index.html;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+4. Restart Nginx
+
+sudo systemctl restart nginx
+✅ Access Your Site
+Open your browser and go to:
+
+http://<your-public-ip>
+Example:
+
+http://20.71.183.45
+✅ Tips
+If you update your GitHub repo and want to pull changes:
+
+cd /var/www/static-website
+sudo git pull
