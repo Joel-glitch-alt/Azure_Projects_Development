@@ -100,3 +100,84 @@ output "generated_number" {
 output "generated_name" {
   value = random_pet.random_name.id
 }
+
+
+                   ____________________________USING AZURE_______________________________
+
+     # USING AZURE
+     # USING AZURE
+provider "azurerm" {
+  features {}
+  subscription_id = "14430f9f-bd49-4721-b2ec-8b513c352e9a"
+}
+
+resource "azurerm_resource_group" "main" {
+  name     = "firstResource"
+  location = "westeurope"
+}
+
+resource "azurerm_virtual_network" "main" {
+  name                = "first-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+
+resource "azurerm_subnet" "main" {
+  name                 = "first-subnet"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+
+resource "azurerm_network_interface" "main" {
+  name                = "first-nic"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.main.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_virtual_machine" "main" {
+  name                  = "firstVM"
+  location              = azurerm_resource_group.main.location
+  resource_group_name   = azurerm_resource_group.main.name
+  network_interface_ids = [azurerm_network_interface.main.id]
+  vm_size               = "Standard_DS1_v2"
+
+  storage_os_disk {
+    name              = "firstVM-os-disk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+storage_image_reference {
+  publisher = "Canonical"
+  offer     = "0001-com-ubuntu-server-focal"
+  sku       = "20_04-lts-gen2"
+  version   = "latest"
+}
+
+
+
+
+
+  os_profile {
+    computer_name  = "firstVm"
+    admin_username = "addition"
+    admin_password = "Youth@99"  # ⚠️ Not recommended in plaintext for production
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+
+  tags = {
+    environment = "TerraformDemo"
+  }
+}
