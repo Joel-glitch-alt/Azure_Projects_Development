@@ -23,15 +23,18 @@ Click Review + Create → Click Create.
 Copy the public IP address of your VM from Azure.
 Connect via SSH:
 
+open Bash or CMD...
 ssh azureuser@<your-vm-public-ip>
 Replace azureuser with your actual username.
+
+Move to your Azure server >>> Network settings >> click on Create port rule >> change the 'Destination port range' to 8080 and 'priority' between 100 to 200.
 
 ***Step 3: Install Jenkins on Azure VM
 3.1 Update and Install Java
 Jenkins requires Java, so install it first:
 
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y openjdk-11-jdk
+sudo apt update && sudo apt upgrade -y        
+sudo apt install openjdk-17-jdk -y
 
 3.2 Add Jenkins Repository and Install Jenkins
 
@@ -57,10 +60,62 @@ http://<your-vm-public-ip>:8080
 **To Get Jenkins Password
 Run this command to get the password:
 
-sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+sudo cat /var/lib/<name-of-jenkins-project>/secrets/initialAdminPassword
+
+
+ USING SONARQUBE ON THE SAME SERVER OR VIRTUAL MACHINE
+
+1) sudo apt update
+
+2) Install prerequisite packages:
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+
+
+3) Add Docker’s official GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+4) Add Docker repository:
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+5) Update the package index again:
+sudo apt update
+
+6) Install Docker Engine:
+sudo apt install docker-ce docker-ce-cli containerd.io -y
+
+7) Start and enable Docker service:
+sudo systemctl start docker
+sudo systemctl enable docker
+
+8) Verify Docker installed correctly:
+sudo docker --version
+
+9)  Run SonarQube on port 9500:
+sudo docker run -d \
+  --name sonarqube \
+  -p 9500:9000 \
+  -v sonarqube_data:/opt/sonarqube/data \
+  -v sonarqube_extensions:/opt/sonarqube/extensions \
+  -v sonarqube_logs:/opt/sonarqube/logs \
+  sonarqube:lts
+
+10)  SonarQube not connecting?, add your user to the docker group:
+Run the following command:
+sudo usermod -aG docker $USER
+
+11) log out & log back in 
+newgrp docker
+
+12) docker ps 
+
+13) ssh -i C:\Users\jjdok\Desktop\id_rsa joel@4.222.232.124
+
+14) http://<your-server-ip>:9600
 
 
 
+*********************************************************************************************************************************
   USING JENKINS
 ***Jenkins is an open-source automation server that helps automate the parts of software development related to building, testing, and deploying, facilitating continuous integration and continuous delivery (CI/CD). It is highly extensible with a vast library of plugins that support building, deploying, and automating any project.
 

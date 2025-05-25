@@ -41,6 +41,8 @@ sonar-scanner \
   -Dsonar.sources=src \
   -Dsonar.host.url=http://localhost:9000 \
   -Dsonar.login=your_sonarqube_token
+
+  
 Example of integrating SonarQube analysis in a Jenkins pipeline (Declarative Pipeline syntax):
 
 pipeline {
