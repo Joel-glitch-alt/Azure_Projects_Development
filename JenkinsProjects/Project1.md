@@ -8,9 +8,9 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 2) Jenkins DashBoard >> Manage Jenkins >> Tools >> Click on 'Add SonanarQube Scanner', name it 'sonar-scanner', check mark 'install automatically' Click 'Save'.
 
-**** Configure SonarQube Server
+**** Configure SonarQube Server Token.
 
-3) Go to SonarQube Dashboard >> Click on 'Adminstartion'  >> Security >> Users >> then generate your TOKEN
+3) Go to SonarQube Dashboard >> Click on 'Adminstration'  >> Security >> Users >> then generate your TOKEN
  >> Provide the TOKEN name >> Expires in >> Click 'GENERATE'. copy token.
 
 4) Manage Jenkins >> Security >> Credentials >> Click on 'global' >> Click on 'Add Credentials' >> select 'secret text'
