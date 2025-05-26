@@ -33,6 +33,12 @@ Terraform is an open-source Infrastructure as Code (IaC) tool developed by Hashi
          *** terraform plan
          *** terraform apply
          *** terraform destroy.
+         *** terraform refresh.
+         *** terraform validate.
+         *** terraform fmt. 
+         *** terraform show.
+         *** terraform providers.
+         *** terraform output.
 
 
                              ___________________# Using a local set up!__________________________ 
