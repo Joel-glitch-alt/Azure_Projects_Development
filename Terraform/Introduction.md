@@ -233,6 +233,10 @@ Great! Since you have a static website (HTML, CSS, JavaScript) hosted on GitHub,
 
 Here’s a step-by-step guide to clone your project and serve it publicly:
 
+****How to access your new VM
+ssh <name of user>@<public-ip>
+
+
 ✅ Step-by-Step: Deploy Static Website on Azure VM
 
 1. Install Nginx
