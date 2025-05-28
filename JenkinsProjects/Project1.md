@@ -206,4 +206,107 @@ JENKINS PIPELINE
             echo '❌ Pipeline failed.'
         }
     }
+
+
+__________________________________****************HOW TO RUN TEST IN PYTHON FILE*****************______________________________-
+
+1) Great question! To get test coverage of your Python code shown in SonarQube UI via a Jenkins pipeline, you need to:
+
+2) Run your tests with coverage tracking (using coverage.py).
+
+3) Generate a coverage report in XML format (coverage.xml).
+
+4) Make sure SonarQube scans your project and imports the coverage report.
+
+5) Configure Jenkins pipeline steps to do all this.
+
+************** Step-by-step guide for your Jenkins pipeline:
+1. Install dependencies
+Make sure you install:
+
+coverage — to measure coverage.
+
+pytest — or any other test runner.
+
+Example in your pipeline:
+
+pip install coverage pytest
+2. Run tests with coverage and generate XML report 
+
+***************Run tests through coverage and output XML:
+coverage run -m pytest
+coverage xml -o coverage.xml
+coverage run -m pytest runs tests collecting coverage data.
+
+coverage xml generates coverage.xml, which SonarQube expects.
+
+3. Configure SonarQube to read coverage.xml
+In your sonar-scanner command, specify:
+
+bash
+-Dsonar.python.coverage.reportPaths=coverage.xml
+
+4. Sample Jenkins pipeline snippet
+groovy
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'pip install --upgrade pip coverage pytest'
+            }
+        }
+
+        stage('Run Tests & Coverage') {
+            steps {
+                sh '''
+                    coverage run -m pytest
+                    coverage xml -o coverage.xml
+                '''
+                junit 'test-reports/results.xml'  // if you have junit tests reports
+            }
+        }
+
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('YourSonarQubeServer') {
+                    sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=your_project_key \
+                          -Dsonar.sources=. \
+                          -Dsonar.python.coverage.reportPaths=coverage.xml \
+                          -Dsonar.python.xunit.reportPath=test-reports/results.xml
+                    '''
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
 }
+Notes:
+You can generate test result reports with pytest and convert them to JUnit XML (--junitxml=test-reports/results.xml) if you want to show test results in SonarQube.
+
+Make sure coverage.xml is in the directory where sonar-scanner runs or provide full path.
+
+Your sonar-project.properties or sonar-scanner CLI options must point to the correct paths.
+
+waitForQualityGate Jenkins step waits for SonarQube's analysis to finish and returns status.
+
+In summary:
+Use coverage run to collect coverage during tests.
+
+Use coverage xml to generate coverage.xml.
+
+Pass that file path to SonarQube (sonar.python.coverage.reportPaths).
+
+Run SonarQube scanner in Jenkins pipeline.
+
+Use waitForQualityGate to get result in Jenkins.
+
