@@ -197,6 +197,7 @@ JENKINS PIPELINE
             }
         }
     }
+   }
 
     post {
         success {
@@ -227,6 +228,28 @@ Make sure you install:
 coverage — to measure coverage.
 
 pytest — or any other test runner.
+
+
+
+Install SonarQube CLI when using vm
+
+# Example (Ubuntu)
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
+
+####
+Click Add SonarQube Scanner
+
+Name: sonar-scanner (exactly as used in your Jenkinsfile)
+
+Uncheck “Install automatically”
+
+Set the path to: /opt/sonar-scanner (or whatever path you used)
+######
+
+
+
 
 Example in your pipeline:
 
@@ -290,6 +313,7 @@ pipeline {
         }
     }
 }
+
 Notes:
 You can generate test result reports with pytest and convert them to JUnit XML (--junitxml=test-reports/results.xml) if you want to show test results in SonarQube.
 
