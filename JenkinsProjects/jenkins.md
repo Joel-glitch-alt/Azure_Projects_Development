@@ -38,6 +38,8 @@ sudo apt install openjdk-17-jdk -y
 
 3.2 Add Jenkins Repository and Install Jenkins
 
+******************For Debian-based systems (Ubuntu, Debian)...............
+
 curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
   /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
@@ -46,6 +48,19 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   
 sudo apt-get update
 sudo apt-get install jenkins
+
+                       OPTION 2
+************************** For RHEL-based systems (Red Hat, CentOS, Fedora, Rocky Linux, AlmaLinux) ********************
+.......................................
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo dnf upgrade
+# Add required dependencies for the jenkins package
+sudo dnf install fontconfig java-21-openjdk
+sudo dnf install jenkins
+sudo systemctl daemon-reload
+..............................
 
 *3.3 Start and Enable Jenkins
 
@@ -71,14 +86,40 @@ sudo cat /var/lib/<name-of-jenkins-project>/secrets/initialAdminPassword
  USING SONARQUBE ON THE SAME SERVER OR VIRTUAL MACHINE
 
 1) sudo apt update
+      
 
+      ********************************* To install SonarQube ******************************************
+2) wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-25.5.0.107428.zip?_gl=1*y4tn6k*_gcl_au*MTcwNjU2MjcwLjE3NDg5NDIxOTA.*_ga*NDI4MzIwMTE2LjE3NDg5NDIxOTA.*_ga_9JZ0GZ5TC6*czE3NDg5NDIxOTAkbzEkZzEkdDE3NDg5NDMyNDgkajYwJGwwJGgw
+
+     >> Renane downloaded zip file
+     mv 'sonarqube-25.5.0.107428.zip?_gl=1*y4tn6k*_gcl_au*MTcwNjU2MjcwLjE3NDg5NDIxOTA.*_ga*NDI4MzIwMTE2LjE3NDg5NDIxOTA.*_ga_9JZ0GZ5TC6*czE3NDg5NDIxOTAkbzEkZzEkdDE3NDg5NDMyNDgkajYwJGwwJGgw' sonarqube-25.5.0.107428.zip
+
+     >>Install unzip file
+      sudo apt install unzip -y
+
+    
+     >> Unzip file 
+     unzip sonarqube-25.5.0.107428.zip
+
+     >> cd sonarqube-25.5.0.107428     >> cd bin    >> ls
+    
+     >> cd ~/sonarqube-25.5.0.107428/bin/linux-x86-64               >> ./sonar.sh start    >>http://<local>:9000
+
+        Connecting to ip address 
+      >>ip a
+
+    ✅ 1. Update sonar.properties to listen on all interfaces
+      >> sudo nano ~/sonarqube-25.5.0.107428/conf/sonar.properties
+
+
+
+
+               
+                   OPTIONS 2
 2) Install prerequisite packages:
 sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
-
-
 3) Add Docker’s official GPG key:
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
 4) Add Docker repository:
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 

@@ -27,9 +27,12 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 8) SETTING UP GIT-HUB CREDENTIALS TO JENKINS
  Go to repositories and navigate to settings >> Developer settings >> Personal Access Tokens >> Tokens(classic) >> Generate New Token >>Generate new token classic >> Check Mark all except delete repo >> click on generate token.
 
- 9) Move to Jenkins >> Manage Jenkins >> Credentials >> Global >> 'username and password', provide Git-Hub username and the Token generated as password.
+ 9) Move to Jenkins >> Manage Jenkins >> Credentials >> Global >> 'username and password', provide 'Git-Hub username' and the Token generated as password.
 
-10) Move On To Create Your Pipeline
+ 10) HOW TO ADD DOCKER-HUB.
+  
+
+11) Move On To Create Your Pipeline
 
 ....Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
@@ -104,20 +107,20 @@ pipeline {
     }
 }
 
-      // Docker Build & Push and Deploy..
-                   stage('Docker Build & Push') {
-                 steps {
-                   script {
-            // 👇 Ensures Jenkins has access to Dockerfile and project files
-                   checkout scm
+        // Docker Build & Push and Deploy..
+                    stage('Docker Build & Push') {
+                    steps {
+                    script {
+                // 👇 Ensures Jenkins has access to Dockerfile and project files
+                    checkout scm
 
-                    def img = docker.build("${DOCKER_IMAGE}")
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                img.push()
+                        def img = docker.build("${DOCKER_IMAGE}")
+                        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                    img.push()
+                }
             }
         }
-    }
-      }
+        }
 
     }
 
