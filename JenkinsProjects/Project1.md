@@ -22,9 +22,11 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 6. Manage Jenkins >> Security >> Credentials >> Click on 'global' >> Click on 'Add Credentials' >> select (username and password), scope (Global...) >> provide docker hub username (eg, addition1905), >> provide your docker hub password >> ID (eg,dockerhub-credentials), same for description. click on 'CREATE'.
 
-\*\*\* SETTING JENKINS SONARQUBE SERVER 7) Manage Jenkins >> System >> scroll down to 'SonarQube servers' Click on 'Add SonarQube' >> Provide a name to be used in the Pipeline (eg,Jenkins-Sonar-Server), >> copy sonarqube url (eg, http://localhost:9000 no slash) and paste it in the 'server url', >> Server Authentication select the name of your sonarqube token (eg, sonar-token) >> click "Apply" and "SAVE".
+\*\*\* SETTING JENKINS SONARQUBE SERVER
 
-8. SETTING UP GIT-HUB CREDENTIALS TO JENKINS
+7.  Manage Jenkins >> System >> scroll down to 'SonarQube servers' Click on 'Add SonarQube' >> Provide a name to be used in the Pipeline (eg,Jenkins-Sonar-Server), >> copy sonarqube url (eg, http://localhost:9000 no slash) and paste it in the 'server url', >> Server Authentication select the name of your sonarqube token (eg, sonar-token) >> click "Apply" and "SAVE".
+
+8) SETTING UP GIT-HUB CREDENTIALS TO JENKINS
 
 ### 8) SETTING UP GITHUB CREDENTIALS IN JENKINS
 
@@ -171,7 +173,7 @@ agent any
 
 }
 
-****************\*\*\*\*****************PROJECT TWO USING NODEJS (BACK END) working******************\*\*\*\*******************
+******\*\*\*\*******\*\*\*\*******\*\*\*\*******PROJECT TWO USING NODEJS (BACK END) working********\*\*********\*\*\*\*********\*\*********
 JENKINS PIPELINE
 
 pipeline {
@@ -248,7 +250,7 @@ agent any
         }
     }
 
-****************\_\_**********************\*\*\*\*******HOW TO RUN TEST IN PYTHON FILE********\***********************\_\_**************-
+******\*\*\*\*******\_\_**********\*\***********\*\*\*\***\*\***HOW TO RUN TEST IN PYTHON FILE**\*\*\*\***\***********\*\***********\_\_******\*\*******-
 
 1. Great question! To get test coverage of your Python code shown in SonarQube UI via a Jenkins pipeline, you need to:
 
@@ -260,7 +262,7 @@ agent any
 
 5. Configure Jenkins pipeline steps to do all this.
 
-******\*\******* Step-by-step guide for your Jenkins pipeline:
+**\*\***\*\***\*\*** Step-by-step guide for your Jenkins pipeline:
 
 1. Install dependencies
    Make sure you install:
@@ -293,7 +295,7 @@ Example in your pipeline:
 
 pip install coverage pytest 2. Run tests with coverage and generate XML report
 
-******\*\*\*******Run tests through coverage and output XML:
+**\*\***\*\*\***\*\***Run tests through coverage and output XML:
 coverage run -m pytest
 coverage xml -o coverage.xml
 coverage run -m pytest runs tests collecting coverage data.
