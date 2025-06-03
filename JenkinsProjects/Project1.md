@@ -1,46 +1,81 @@
-1) Install Jenkins
-2) Install all Tools needed like (Node.Js/ npm) on Jenkins agent.
-3) Use Docker with Containers.
-
+1. Install Jenkins
+2. Install all Tools needed like (Node.Js/ npm) on Jenkins agent.
+3. Use Docker with Containers.
 
 CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
-1) Install SonarQube scanner plugins in Jenkins 
 
-2) Jenkins DashBoard >> Manage Jenkins >> Tools >> Click on 'Add SonanarQube Scanner', name it 'sonar-scanner', check mark 'install automatically' Click 'Save'.
+1. Install SonarQube scanner plugins in Jenkins
 
-**** Configure SonarQube Server Token.
+2. Jenkins DashBoard >> Manage Jenkins >> Tools >> Click on 'Add SonanarQube Scanner', name it 'sonar-scanner', check mark 'install automatically' Click 'Save'.
 
-3) Go to SonarQube Dashboard >> Click on 'Adminstration'  >> Security >> Users >> then generate your TOKEN
- >> Provide the TOKEN name >> Expires in >> Click 'GENERATE'. copy token.
+\*\*\*\* Configure SonarQube Server Token.
 
-4) Manage Jenkins >> Security >> Credentials >> Click on 'global' >> Click on 'Add Credentials' >> select 'secret text'
->> paste the SONARQUBE SECRET TEXT into the 'SECRET' bar >> provide ID (eg, sonar-token) and DESCRIPTION (eg, sonar-token), click "CREATE".
+3. Go to SonarQube Dashboard >> Click on 'Adminstration' >> Security >> Users >> then generate your TOKEN
 
-5) Navigate to your Docker Hub DashBaord, copy username (eg, addition1905).
+   > > Provide the TOKEN name >> Expires in >> Click 'GENERATE'. copy token.
 
-6) Manage Jenkins >> Security >> Credentials >> Click on 'global' >> Click on 'Add Credentials'  >> select (username and password), scope (Global...) >> provide docker hub username (eg, addition1905), >> provide your docker hub password >> ID (eg,dockerhub-credentials), same for description. click on 'CREATE'.
+4. Manage Jenkins >> Security >> Credentials >> Click on 'global' >> Click on 'Add Credentials' >> select 'secret text'
 
-*** SETTING JENKINS SONARQUBE SERVER
-7) Manage Jenkins >> System >> scroll down to 'SonarQube servers' Click on 'Add SonarQube' >> Provide a name to be used in the Pipeline (eg,Jenkins-Sonar-Server), >> copy sonarqube url (eg, http://localhost:9000 no slash) and paste it in the 'server url', >> Server Authentication select the name of your sonarqube token (eg, sonar-token) >> click "Apply" and "SAVE".
+   > > paste the SONARQUBE SECRET TEXT into the 'SECRET' bar >> provide ID (eg, sonar-token) and DESCRIPTION (eg, sonar-token), click "CREATE".
 
+5. Navigate to your Docker Hub DashBaord, copy username (eg, addition1905).
 
-8) SETTING UP GIT-HUB CREDENTIALS TO JENKINS
- Go to repositories and navigate to settings >> Developer settings >> Personal Access Tokens >> Tokens(classic) >> Generate New Token >>Generate new token classic >> Check Mark all except delete repo >> click on generate token.
+6. Manage Jenkins >> Security >> Credentials >> Click on 'global' >> Click on 'Add Credentials' >> select (username and password), scope (Global...) >> provide docker hub username (eg, addition1905), >> provide your docker hub password >> ID (eg,dockerhub-credentials), same for description. click on 'CREATE'.
 
- 9) Move to Jenkins >> Manage Jenkins >> Credentials >> Global >> 'username and password', provide 'Git-Hub username' and the Token generated as password.
+\*\*\* SETTING JENKINS SONARQUBE SERVER 7) Manage Jenkins >> System >> scroll down to 'SonarQube servers' Click on 'Add SonarQube' >> Provide a name to be used in the Pipeline (eg,Jenkins-Sonar-Server), >> copy sonarqube url (eg, http://localhost:9000 no slash) and paste it in the 'server url', >> Server Authentication select the name of your sonarqube token (eg, sonar-token) >> click "Apply" and "SAVE".
 
- 10) HOW TO ADD DOCKER-HUB.
-  
+8. SETTING UP GIT-HUB CREDENTIALS TO JENKINS
 
-11) Move On To Create Your Pipeline
+### 8) SETTING UP GITHUB CREDENTIALS IN JENKINS
+
+- Go to your GitHub account, navigate to **Settings** > **Developer settings** > **Personal Access Tokens** > **Tokens (classic)**.
+- Click **Generate new token (classic)**.
+- Select the required scopes (check all except "delete repo"), then click **Generate token**.
+- Copy the generated token.
+
+- In Jenkins, go to **Manage Jenkins** > **Credentials** > **(global)** > **Add Credentials**.
+- Choose **Username with password**.
+- Enter your GitHub username and paste the generated token as the password.
+- Provide an ID (e.g., `git-cred`) and a description, then click **Create**.
+
+### 9) HOW TO ADD DOCKER HUB CREDENTIALS TO JENKINS
+
+- Go to your Docker Hub account and copy your username.
+- In Jenkins, go to **Manage Jenkins** > **Credentials** > **(global)** > **Add Credentials**.
+- Select **Username with password**.
+- Enter your Docker Hub username and password.
+- Provide an ID (e.g., `dockerhub-credentials`) and a description, then click **Create**.
+
+### 10) USING DOCKER IN YOUR JENKINS PIPELINE
+
+- In your Jenkins pipeline, you can use the `docker` block to run stages inside Docker containers, or use `docker.build` and `docker.withRegistry` to build and push Docker images.
+- Example snippet for building and pushing a Docker image:
+
+  ```groovy
+  stage('Docker Build & Push') {
+      steps {
+          script {
+              def img = docker.build("${DOCKER_IMAGE}")
+              docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                  img.push()
+              }
+          }
+      }
+  }
+  ```
+
+- Make sure your Jenkins agent has Docker installed and the necessary permissions to run Docker commands.
+
+11. Move On To Create Your Pipeline
 
 ....Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
+COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
 
-   COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
-***************************************************************************************************************************
+---
+
 pipeline {
-    agent any
+agent any
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner' // Matches Global Tool Config name
@@ -105,6 +140,7 @@ pipeline {
             waitForQualityGate abortPipeline: true
         }
     }
+
 }
 
         // Docker Build & Push and Deploy..
@@ -132,14 +168,14 @@ pipeline {
             echo '❌ Pipeline failed.'
         }
     }
+
 }
 
-
-************************************PROJECT TWO USING NODEJS (BACK END) working****************************************
+****************\*\*\*\*****************PROJECT TWO USING NODEJS (BACK END) working******************\*\*\*\*******************
 JENKINS PIPELINE
 
-   pipeline {
-    agent any
+pipeline {
+agent any
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -200,7 +236,8 @@ JENKINS PIPELINE
             }
         }
     }
-   }
+
+}
 
     post {
         success {
@@ -211,37 +248,37 @@ JENKINS PIPELINE
         }
     }
 
+****************\_\_**********************\*\*\*\*******HOW TO RUN TEST IN PYTHON FILE********\***********************\_\_**************-
 
-__________________________________****************HOW TO RUN TEST IN PYTHON FILE*****************______________________________-
+1. Great question! To get test coverage of your Python code shown in SonarQube UI via a Jenkins pipeline, you need to:
 
-1) Great question! To get test coverage of your Python code shown in SonarQube UI via a Jenkins pipeline, you need to:
+2. Run your tests with coverage tracking (using coverage.py).
 
-2) Run your tests with coverage tracking (using coverage.py).
+3. Generate a coverage report in XML format (coverage.xml).
 
-3) Generate a coverage report in XML format (coverage.xml).
+4. Make sure SonarQube scans your project and imports the coverage report.
 
-4) Make sure SonarQube scans your project and imports the coverage report.
+5. Configure Jenkins pipeline steps to do all this.
 
-5) Configure Jenkins pipeline steps to do all this.
+******\*\******* Step-by-step guide for your Jenkins pipeline:
 
-************** Step-by-step guide for your Jenkins pipeline:
 1. Install dependencies
-Make sure you install:
+   Make sure you install:
 
 coverage — to measure coverage.
 
 pytest — or any other test runner.
 
-
-
 Install SonarQube CLI when using vm
 
 # Example (Ubuntu)
+
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
 unzip sonar-scanner-cli-5.0.1.3006-linux.zip
 sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
 
 ####
+
 Click Add SonarQube Scanner
 
 Name: sonar-scanner (exactly as used in your Jenkinsfile)
@@ -249,17 +286,14 @@ Name: sonar-scanner (exactly as used in your Jenkinsfile)
 Uncheck “Install automatically”
 
 Set the path to: /opt/sonar-scanner (or whatever path you used)
+
 ######
-
-
-
 
 Example in your pipeline:
 
-pip install coverage pytest
-2. Run tests with coverage and generate XML report 
+pip install coverage pytest 2. Run tests with coverage and generate XML report
 
-***************Run tests through coverage and output XML:
+******\*\*\*******Run tests through coverage and output XML:
 coverage run -m pytest
 coverage xml -o coverage.xml
 coverage run -m pytest runs tests collecting coverage data.
@@ -267,16 +301,16 @@ coverage run -m pytest runs tests collecting coverage data.
 coverage xml generates coverage.xml, which SonarQube expects.
 
 3. Configure SonarQube to read coverage.xml
-In your sonar-scanner command, specify:
+   In your sonar-scanner command, specify:
 
 bash
 -Dsonar.python.coverage.reportPaths=coverage.xml
 
 4. Sample Jenkins pipeline snippet
-groovy
+   groovy
 
 pipeline {
-    agent any
+agent any
 
     stages {
         stage('Install dependencies') {
@@ -315,6 +349,7 @@ pipeline {
             }
         }
     }
+
 }
 
 Notes:
@@ -336,4 +371,3 @@ Pass that file path to SonarQube (sonar.python.coverage.reportPaths).
 Run SonarQube scanner in Jenkins pipeline.
 
 Use waitForQualityGate to get result in Jenkins.
-
