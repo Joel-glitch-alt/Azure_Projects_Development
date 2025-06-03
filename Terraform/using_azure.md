@@ -17,7 +17,6 @@ terraform {
 }
 
 provider "azurerm" {
-  //resource_provider_registrations = "none" # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
   features {}
 }
 
@@ -35,6 +34,29 @@ resource "azurerm_virtual_network" "addition" {
   resource_group_name = azurerm_resource_group.addition.name
 }
 
+// Network Security Group
+resource "azurerm_network_security_group" "addition" {
+  name                = "addition-security-group"
+  location            = azurerm_resource_group.addition.location
+  resource_group_name = azurerm_resource_group.addition.name
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+
 // Subnet
 resource "azurerm_subnet" "addition" {
   name                 = "internal"
@@ -43,7 +65,13 @@ resource "azurerm_subnet" "addition" {
   address_prefixes     = ["10.0.2.0/24"]
 }
 
-//Public IP address
+// Connect NSG to Subnet
+resource "azurerm_subnet_network_security_group_association" "addition" {
+  subnet_id                 = azurerm_subnet.addition.id
+  network_security_group_id = azurerm_network_security_group.addition.id
+}
+
+// Public IP address
 resource "azurerm_public_ip" "addition" {
   name                = "addition-public-ip"
   location            = azurerm_resource_group.addition.location
@@ -51,40 +79,35 @@ resource "azurerm_public_ip" "addition" {
   allocation_method   = "Dynamic"
   sku                 = "Basic"
 }
-//Output
-output "public_ip" {
-  value = azurerm_public_ip.addition.ip_address
-}
 
-
-//Network Interface
+// Network Interface
 resource "azurerm_network_interface" "addition" {
   name                = "addition-nic"
   location            = azurerm_resource_group.addition.location
   resource_group_name = azurerm_resource_group.addition.name
 
- ip_configuration {
-  name                          = "internal"
-  subnet_id                     = azurerm_subnet.addition.id
-  private_ip_address_allocation = "Dynamic"
-  public_ip_address_id          = azurerm_public_ip.addition.id 
- }
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.addition.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.addition.id
+  }
 }
 
-//Virtual machine
+// Virtual Machine
 resource "azurerm_linux_virtual_machine" "addition" {
   name                = "addition-machine"
   resource_group_name = azurerm_resource_group.addition.name
   location            = azurerm_resource_group.addition.location
   size                = "Standard_F2"
   admin_username      = "addition"
-  
+
   network_interface_ids = [
     azurerm_network_interface.addition.id,
   ]
 
   admin_ssh_key {
-    username   = "addition"  
+    username   = "addition"
     public_key = file("C:/Users/jjDok/Desktop/id_rsa.pub")
   }
 
@@ -99,4 +122,9 @@ resource "azurerm_linux_virtual_machine" "addition" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+}
+
+// Output
+output "public_ip" {
+  value = azurerm_public_ip.addition.ip_address
 }

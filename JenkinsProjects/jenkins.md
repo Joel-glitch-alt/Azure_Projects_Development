@@ -52,6 +52,11 @@ sudo apt-get install jenkins
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
+WHEN JENKINS HAS PROBLEM NOT WORKING.
+
+🔧 Step 1: Check Jenkins Service Status
+sudo systemctl status jenkins.service
+
 Step 5: Access Jenkins
 Open a browser and go to:
 http://<your-vm-public-ip>:8080
