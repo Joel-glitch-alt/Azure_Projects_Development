@@ -202,6 +202,19 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 ################################# RELEASE TO AZURE WEB APPS #################################
 az webapp config container set --name tetris-game-app --resource-group MyTest-RG --docker-custom-image-name mylabacr22.azurecr.io/tetris-game-app:latest
 
+17. If Jenkins is running as a system service (e.g., on Ubuntu):
+    🔄 Restart Jenkins:
+    sudo systemctl restart jenkins
+
+    ⏹ Stop Jenkins:
+    sudo systemctl stop jenkins
+
+    ▶ Start Jenkins:
+    sudo systemctl start jenkins
+
+    📋 Check status:
+    sudo systemctl status jenkins
+
 **\*\*\*\***\*\***\*\*\*\***\*\*\*\***\*\*\*\***\*\***\*\*\*\***\*\***\*\*\*\***\*\*\*\***\*\*\*\***\*\*\*\***\*\*\*\***\*\*\*\*\*\*
 
 USING JENKINS
