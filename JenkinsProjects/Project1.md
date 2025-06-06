@@ -70,11 +70,9 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 11. Move On To Create Your Pipeline
 
-....Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
+**\*\***\***\*\***Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
-COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
-
----
+********\*\*\*\*********\*\*\*********\*\*\*\*********COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
 
 pipeline {
 agent any
@@ -173,7 +171,7 @@ agent any
 
 }
 
-******\*\*\*\*******\*\*\*\*******\*\*\*\*******PROJECT TWO USING NODEJS (BACK END) working********\*\*********\*\*\*\*********\*\*********
+**\*\***\*\*\*\***\*\***\*\*\*\***\*\***\*\*\*\***\*\***PROJECT TWO USING NODEJS (BACK END) working**\*\*\*\***\*\***\*\*\*\***\*\*\*\***\*\*\*\***\*\***\*\*\*\***
 JENKINS PIPELINE
 
 pipeline {
@@ -250,7 +248,7 @@ agent any
         }
     }
 
-******\*\*\*\*******\_\_**********\*\***********\*\*\*\***\*\***HOW TO RUN TEST IN PYTHON FILE**\*\*\*\***\***********\*\***********\_\_******\*\*******-
+**\*\***\*\*\*\***\*\***\_\_\***\*\*\*\*\***\*\*\***\*\*\*\*\***\*\*\*\***\*\***HOW TO RUN TEST IN PYTHON FILE**\*\*\*\***\*\***\*\*\*\*\***\*\*\***\*\*\*\*\***\_\_**\*\***\*\***\*\***-
 
 1. Great question! To get test coverage of your Python code shown in SonarQube UI via a Jenkins pipeline, you need to:
 
