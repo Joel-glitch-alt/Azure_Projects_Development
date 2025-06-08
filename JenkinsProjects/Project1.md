@@ -72,7 +72,7 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 **\*\***\***\*\***Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
-********\*\*\*\*********\*\*\*********\*\*\*\*********COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
+**\*\*\*\***\*\*\*\***\*\*\*\***\*\*\***\*\*\*\***\*\*\*\***\*\*\*\***COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
 
 pipeline {
 agent any
@@ -171,8 +171,7 @@ agent any
 
 }
 
-**\*\***\*\*\*\***\*\***\*\*\*\***\*\***\*\*\*\***\*\***PROJECT TWO USING NODEJS (BACK END) working**\*\*\*\***\*\***\*\*\*\***\*\*\*\***\*\*\*\***\*\***\*\*\*\***
-JENKINS PIPELINE
+**\*\***\*\*\*\***\*\***\*\*\*\***\*\*PROJECT TWO USING NODEJS (BACK END) working**\*\*\*\***\*\***\*\*\*\*\*\*\*\*\*\
 
 pipeline {
 agent any
