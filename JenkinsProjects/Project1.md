@@ -72,6 +72,133 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 **\*\***\***\*\***Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
+**\*\***\*\***\*\***\_\_\_\_**\*\***\*\***\*\***DEMO TO SHOW IF SONARQUBE UI AND JENKINS ARE CONNECTED**\*\***\*\***\*\***\_\_\_\_**\*\***\*\***\*\***
+
+pipeline {
+agent any
+
+    // Remove the tools section since we'll use the scanner directly
+    // Remove custom environment variables since we'll use Jenkins configuration
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Hello from Jenkins Pipeline!'
+                // If you have a repo, uncomment the next line
+                // checkout scm
+            }
+        }
+
+        stage('Create Hello Project') {
+            steps {
+                script {
+                    // Create a simple source file
+                    writeFile file: 'hello.js', text: '''
+
+// Simple Hello World function for SonarQube
+function sayHello() {
+console.log("Hello from SonarQube via Jenkins!");
+return "Hello World";
+}
+
+function greetUser(name) {
+if (name) {
+console.log("Hello, " + name + "!");
+} else {
+console.log("Hello, World!");
+}
+}
+
+// Example of code that might have quality issues for SonarQube to detect
+function exampleFunction() {
+var unused = "This variable is unused"; // Code smell
+console.log("Hello SonarQube - analyzing code quality!");
+}
+
+// Call the functions
+sayHello();
+greetUser("SonarQube");
+exampleFunction();
+'''
+
+                    // Create sonar-project.properties
+                    writeFile file: 'sonar-project.properties', text: '''
+
+# Required metadata
+
+sonar.projectKey=jenkins-hello-world
+sonar.projectName=Jenkins Hello World Project
+sonar.projectVersion=1.0
+
+# Source code location
+
+sonar.sources=.
+sonar.sourceEncoding=UTF-8
+
+# Language settings
+
+sonar.javascript.file.suffixes=.js
+
+# Exclude Jenkins and SonarQube files
+
+sonar.exclusions=**/\*.xml,**/\*.log,**/sonar-scanner/**
+'''
+}
+}
+}
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    echo 'Hello! Starting SonarQube Analysis...'
+
+                    // Use Jenkins configured SonarQube server
+                    withSonarQubeEnv('sonar-server') {
+                        def sonarScannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                        sh """
+                            ${sonarScannerHome}/bin/sonar-scanner \\
+                                -Dsonar.projectKey=jenkins-hello-world \\
+                                -Dsonar.projectName='Jenkins Hello World Project' \\
+                                -Dsonar.projectVersion=1.0 \\
+                                -Dsonar.sources=.
+                        """
+                    }
+
+                    echo 'Hello! SonarQube Analysis completed!'
+                }
+            }
+        }
+
+        stage('Display Results') {
+            steps {
+                script {
+                    echo 'Hello! Analysis has been sent to SonarQube!'
+                    echo "Check your SonarQube dashboard at: http://68.154.50.4:9500"
+                    echo 'Project: Jenkins Hello World Project'
+                    echo 'Look for the Hello World JavaScript code in the analysis!'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Hello! Pipeline completed.'
+            echo "Check your SonarQube dashboard at: http://68.154.50.4:9500"
+            echo 'Your Hello World project should now be visible in SonarQube!'
+        }
+        success {
+            echo 'Hello! Pipeline succeeded! 🎉'
+        }
+        failure {
+            echo 'Hello! Pipeline failed, but we tried our best! 😊'
+        }
+    }
+
+}
+//END
+
+---
+
 **\*\*\*\***\*\*\*\***\*\*\*\***\*\*\***\*\*\*\***\*\*\*\***\*\*\*\***COMPLETE PIPELINE FOR THE ABOVE PROJECT(SONARQUBE, DOCKERHUB) working.
 
 pipeline {
