@@ -12,10 +12,17 @@ Paste your public SSH key (or generate one if you don't have one).
 Click "Next: Disks", select Standard SSD.
 Click "Next: Networking", ensure:
 Public IP is enabled.
+
+**\*\*\*\***\*\*\*\***\*\*\*\***verify Azure Metadata**\*\***\*\*\*\***\*\***
+
+# Check VM size/resources
+
+> > curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq
+
 |
 |
 | \***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\***\*\*\*\*\***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***\*\***\*\***\*\***\*\***
-Inbound port rules: Allow SSH (22) and HTTP (80).
+Inbound port rules: Allow SSH (22) and HTTP (80) and 8080 on the vm Network (Inbound Network).
 Click Review + Create → Click Create.
 
 \*\*\*Step 2: Connect to the Virtual Machine via SSH
@@ -189,9 +196,17 @@ USING SONARQUBE ON THE SAME SERVER OR VIRTUAL MACHINE
         >>>  $ sudo systemctl start jenkins //Start Jenkins as a service
         >>>  $ systemctl status jenkins
 
-3 ) Install Azure CLI
-Refer --- https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+3 ) Install Azure CLI ### Refer --- https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
+
+      curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+
+             *** Restart Affected Services (Safely)
+                  sudo systemctl restart \
+                  dbus.service \
+                  networkd-dispatcher.service \
+                  systemd-logind.service \
+                  unattended-upgrades.service
 
 4 ) Install Docker >>> $ sudo apt-get install docker.io
 
