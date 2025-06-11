@@ -122,7 +122,7 @@ USING SONARQUBE ON THE SAME SERVER OR VIRTUAL MACHINE
         >>> sudo nano ~/sonarqube-25.5.0.107428/conf/sonar.properties
 
     ...........................................................................................................................................
-    OPTIONS 2 (REcommended)
+    OPTIONS 2 FOR INSTALLING SONARQUBE (REcommended).
 
 3.  Install prerequisite packages:
     > > > sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
@@ -142,12 +142,16 @@ USING SONARQUBE ON THE SAME SERVER OR VIRTUAL MACHINE
 
 8.  Start and enable Docker service:
 
-    > > > sudo systemctl start docker
+    > > > sudo systemctl start docker  
     > > > sudo systemctl enable docker
 
 9.  Verify Docker installed correctly:
 
     > > > sudo docker --version
+
+9.a. Verify Docker is running:
+
+    > > > sudo systemctl status docker
 
 10. Run SonarQube on port 9500:
     sudo docker run -d \
@@ -157,6 +161,10 @@ USING SONARQUBE ON THE SAME SERVER OR VIRTUAL MACHINE
     -v sonarqube_extensions:/opt/sonarqube/extensions \
     -v sonarqube_logs:/opt/sonarqube/logs \
     sonarqube:lts
+
+10.b. Restart SonarQube:
+
+    > > > sudo docker start sonarqube
 
 11. SonarQube not connecting?, add your user to the docker group:
     Run the following command:
