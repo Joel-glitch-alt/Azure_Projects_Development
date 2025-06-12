@@ -68,11 +68,14 @@ CONNECTING SONARQUBE AND DOCKER HUB TO JENKINS
 
 - Make sure your Jenkins agent has Docker installed and the necessary permissions to run Docker commands.
 
-11. Move On To Create Your Pipeline
+11. HOW TO ADD SONAQUBE QUALITY GATE TO JENKINS
+    On the SonarQube UI >> Quality Gate >> Click on "Create" >> Provide a name eg. "sonar-quality-gate", >> Adminstration >> Click on Configuration >> Select Webhooks >> Click on "Create", >> Provide a name >> add your Jenkins URL >> Click on 'Create' to finish.
+
+12. Move On To Create Your Pipeline
 
 **\*\***\***\*\***Jenkins, Docker, SonarQube Integration source (https://www.youtube.com/watch?v=ScdedztTaAU).
 
-**\*\***\*\***\*\***\_\_\_\_**\*\***\*\***\*\***DEMO TO SHOW IF SONARQUBE UI AND JENKINS ARE CONNECTED**\*\***\*\***\*\***\_\_\_\_**\*\***\*\***\*\***
+\*\***\_\_\_\_**\*\***\*\***\*\***DEMO TO SHOW IF SONARQUBE UI AND JENKINS ARE CONNECTED**\*\***\*\***\*\***\_\_\_\_**\*\*\*\*\*\
 
 pipeline {
 agent any
