@@ -8,6 +8,8 @@ RUNNING JENKINS ON DOCKER CONTAINER SERVERLESS
 
 sudo apt update
 
+sudo apt upgrade -y
+
 docker run -d \
 --name joel-jenkins \
 -p 8080:8080 -p 50000:50000 \
@@ -19,6 +21,8 @@ jenkins/jenkins:lts
 example 2 (second Jenkins-Docker container fresh project).
 
 sudo apt update
+
+sudo apt upgrade -y
 
 docker run -d \
 --name addition-jenkins-fresh \
@@ -48,7 +52,7 @@ After this, try: docker --version inside the container.
 
 STEP 2 2) TO GET THE JENKINS PASSWORD
 
-****\*\*\*\*****\*\*\*\*****\*\*\*\*****To get the initial admin password for Jenkins and complete the setup, run:
+\***\*\*\*\*\*\*\***\*\*\*\*\***\*\*\*\*\*\*\***To get the initial admin password for Jenkins and complete the setup, run:
 docker exec -it <name of container> cat /var/jenkins_home/secrets/initialAdminPassword
 
 ---
